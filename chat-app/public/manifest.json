@@ -1,0 +1,21 @@
+{
+    "short_name": "Chat App",
+    "name": "Chat App PWA",
+    "icons": [
+        {
+            "src": "/images/logo-662x664.png",
+            "type": "image/png",
+            "sizes": "662x664",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/images/logo.png",
+            "type": "image/png",
+            "sizes": "1024x1024"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+}
