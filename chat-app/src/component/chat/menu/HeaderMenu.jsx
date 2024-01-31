@@ -8,7 +8,7 @@ const MenuOptions = styled(MenuItem)`
   color: #4a4a4a;
 `;
 
-function HeaderMenu() {
+function HeaderMenu({ setOpenDrawer }) {
   const [open, setOpen] = useState(null);
 
   const handleClose = () => {
@@ -41,7 +41,13 @@ function HeaderMenu() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuOptions onClick={handleClose}>Profile</MenuOptions>
+        <MenuOptions
+          onClick={() => {
+            handleClose(), setOpenDrawer(true);
+          }}
+        >
+          Profile
+        </MenuOptions>
         <MenuOptions onClick={handleClose}>My account</MenuOptions>
         <MenuOptions onClick={handleClose}>Logout</MenuOptions>
       </Menu>

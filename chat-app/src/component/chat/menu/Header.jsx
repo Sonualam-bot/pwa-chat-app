@@ -1,13 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AccountContext } from "../../../context/AccountProvider";
 import { Box, styled } from "@mui/material";
 import { Chat as MessageIcon } from "@mui/icons-material";
 
 //Component
 import HeaderMenu from "./HeaderMenu";
+import InfoDrawer from "../../Drawer/InfoDrawer";
 
 const ImageComponent = styled(Box)`
-  height: 44px;
+  height: 52;
   background: #ededed;
   padding: 8px 16px;
   display: flex;
@@ -29,22 +30,35 @@ const Wrapper = styled(Box)`
 `;
 
 const Image = styled("img")({
-  height: 35,
-  width: 35,
+  height: 40,
+  width: 40,
   borderRadius: "50%",
+  cursor: "pointer",
 });
 
 function Header() {
   const { account } = useContext(AccountContext);
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const toggleDrawer = () => {
+    setOpenDrawer(true);
+  };
 
   return (
-    <ImageComponent>
-      <Image src={account.picture} alt="dp" />
-      <Wrapper>
-        <MessageIcon />
-        <HeaderMenu />
-      </Wrapper>
-    </ImageComponent>
+    <>
+      <ImageComponent>
+        <Image
+          src={account.picture}
+          alt="profile-picture"
+          onClick={() => toggleDrawer()}
+        />
+        <Wrapper>
+          <MessageIcon />
+          <HeaderMenu setOpenDrawer={setOpenDrawer} />
+        </Wrapper>
+      </ImageComponent>
+      <InfoDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+    </>
   );
 }
 
