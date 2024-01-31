@@ -3,6 +3,8 @@ import { jwtDecode } from "jwt-decode";
 
 import { Box, Dialog, List, ListItem, Typography, styled } from "@mui/material";
 import qrImage from "../../assets/qr.jpg";
+import { useContext } from "react";
+import { AccountContext } from "../../context/AccountProvider";
 
 const dialogStyle = {
   height: "95%",
@@ -46,19 +48,21 @@ const StyledList = styled(List)`
   }
 `;
 
-const onLoginSuccess = (res) => {
-  const decoded = jwtDecode(res.credentials);
-  console.log(decoded);
-};
-
-const onLoginError = (res) => {
-  console.log("Login failed", res);
-};
-
 function LoginDialog() {
+  const { setAccount } = useContext(AccountContext);
+
+  const onLoginSuccess = (res) => {
+    const decoded = jwtDecode(res.credential);
+    setAccount(decoded);
+  };
+
+  const onLoginError = (res) => {
+    console.log("Login failed", res);
+  };
+
   return (
     <div>
-      <Dialog open={true} PaperProps={{ sx: dialogStyle }}>
+      <Dialog open={true} PaperProps={{ sx: dialogStyle }} hideBackdrop={true}>
         <Container1>
           <Container2>
             <Title>To use WhatsApp on your computer:</Title>
