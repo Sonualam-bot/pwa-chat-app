@@ -32,3 +32,24 @@ export const newConversation = async (req, res) => {
     });
   }
 };
+
+export const getConversation = async (req, res) => {
+  try {
+    const senderId = req.body.senderId;
+    const receiverId = req.body.receiverId;
+
+    const conversation = await Conversation.findOne({
+      members: { $all: [receiverId, senderId] },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Successfully fetched conversation",
+      conversation: conversation,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
