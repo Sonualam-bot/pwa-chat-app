@@ -1,51 +1,25 @@
 import express from "express";
-import { Server } from "socket.io";
-import { createServer } from "http";
+import dotenv from "dotenv";
 import cors from "cors";
+import bodyParser from "body-parser";
 
-const port = 3000;
+import databaseConnection from "./database/db.js";
+import userRouter from "./routes/routes.js";
 
 const app = express();
-
-const server = createServer(app);
-
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
-
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST"],
-    credentials: true,
-  })
-);
+dotenv.config();
+databaseConnection();
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Chat server started");
 });
 
-io.on("connection", (socket) => {
-  console.log("user connected", socket.id);
+app.use("/", userRouter);
 
-  socket.on("message", ({ room, message }) => {
-    console.log({ room, message });
-    socket.to(room).emit("receive-message", message);
-  });
-
-  socket.on("join-room", (room) => {
-    socket.join(room);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User Disconnected", socket.id);
-  });
-});
-
-server.listen(port, () => {
-  console.log(`Server is running on port ${port} `);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
