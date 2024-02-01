@@ -5,6 +5,7 @@ import { Box, Dialog, List, ListItem, Typography, styled } from "@mui/material";
 import qrImage from "../../assets/qr.jpg";
 import { useContext } from "react";
 import { AccountContext } from "../../context/AccountProvider";
+import { addUser } from "../../service/api";
 
 const dialogStyle = {
   height: "95%",
@@ -51,9 +52,10 @@ const StyledList = styled(List)`
 function LoginDialog() {
   const { setAccount } = useContext(AccountContext);
 
-  const onLoginSuccess = (res) => {
+  const onLoginSuccess = async (res) => {
     const decoded = jwtDecode(res.credential);
     setAccount(decoded);
+    await addUser(decoded);
   };
 
   const onLoginError = (res) => {
