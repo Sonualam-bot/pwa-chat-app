@@ -15,17 +15,20 @@ const StyledDivider = styled(Divider)`
   opacity: 0.6;
 `;
 
-function Conversations() {
+function Conversations({ text }) {
   const [users, setUsers] = useState([]);
   const { account } = useContext(AccountContext);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await getUsers();
-      setUsers(response.users);
+      const filteredData = response?.users?.filter((user) =>
+        user.name.toLowerCase().includes(text.toLowerCase())
+      );
+      setUsers(filteredData);
     };
     fetchData();
-  }, []);
+  }, [text]);
 
   return (
     <Component>

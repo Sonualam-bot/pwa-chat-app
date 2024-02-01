@@ -33,14 +33,17 @@ const InputField = styled(InputBase)`
   font-size: 14px;
 `;
 
-function Search() {
+function Search({ setText }) {
   return (
     <Container>
       <Wrapper>
         <Icon fontSize={"small"}>
           <SearchIcon />
         </Icon>
-        <InputField placeholder="Search or start new chat" />
+        <InputField
+          placeholder="Search or start new chat"
+          onChange={(e) => setText(e.target.value)}
+        />
       </Wrapper>
     </Container>
   );
