@@ -30,13 +30,18 @@ const InputField = styled(InputBase)`
   font-size: 14px;
 `;
 
-function Footer() {
+function Footer({ sendText, setValue, value }) {
   return (
     <Container>
       <EmojiEmotionsOutlined />
       <AddIcon />
       <Search>
-        <InputField placeholder="Type a message" />
+        <InputField
+          placeholder="Type a message"
+          onChange={(e) => setValue(e.target.value)}
+          onKeyPress={(e) => sendText(e)}
+          value={value}
+        />
       </Search>
       <Mic />
     </Container>
