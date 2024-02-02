@@ -32,13 +32,13 @@ function Conversations({ text }) {
 
   return (
     <Component>
-      {users?.map((user) => {
+      {users?.map((user, index) => {
         return (
           user.sub !== account.sub && (
             <>
-              {" "}
               <ConversationCard user={user} key={user._id} />
-              <StyledDivider />
+
+              {users.length !== index + 1 && <StyledDivider />}
             </>
           )
         );
