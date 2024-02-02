@@ -21,12 +21,14 @@ const Container = styled(Box)`
 `;
 
 function Messages({ person, conversation }) {
-  const { account } = useContext(AccountContext);
+  const { account, socket, newMessageFlag, setNewMessageFlag } =
+    useContext(AccountContext);
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState([]);
-  const [newMessageFlag, setNewMessageFlag] = useState(false);
+
   const [file, setFile] = useState();
   const [image, setImage] = useState("");
+  const [incomingMessage, setIncomingMessage] = useState(null);
 
   const scrollRef = useRef();
 
@@ -52,6 +54,8 @@ function Messages({ person, conversation }) {
         };
       }
 
+      socket.current.emit("sendMessage", message);
+
       await newMessage(message);
       setValue("");
       setFile("");
@@ -72,6 +76,21 @@ function Messages({ person, conversation }) {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ transition: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    socket.current.on("getMessage", (data) => {
+      setIncomingMessage({
+        ...data,
+        createAt: Date.now(),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    incomingMessage &&
+      conversation?.members?.includes(incomingMessage.senderId) &&
+      setMessages((prev) => [...prev, incomingMessage]);
+  }, [incomingMessage, conversation]);
 
   return (
     <Wrapper>

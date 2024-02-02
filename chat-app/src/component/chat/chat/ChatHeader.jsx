@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { Search, MoreVert } from "@mui/icons-material";
 import styled from "@emotion/styled";
+import { useContext } from "react";
+import { AccountContext } from "../../../context/AccountProvider";
 
 const defaultDP =
   "https://t4.ftcdn.net/jpg/05/89/93/27/360_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg";
@@ -40,13 +42,20 @@ const Status = styled(Typography)`
 `;
 
 function ChatHeader({ person }) {
+  const { activeUsers } = useContext(AccountContext);
+
   const userDp = person.picture ? person.picture : defaultDP;
   return (
     <Header>
       <Image src={userDp} alt="dp" />
       <Box>
         <Name>{person.name}</Name>
-        <Status>offline</Status>
+        <Status>
+          {" "}
+          {activeUsers?.find((user) => user.sub === person.sub)
+            ? "Online"
+            : "Offline"}{" "}
+        </Status>
       </Box>
       <RightIcons>
         <Search />
