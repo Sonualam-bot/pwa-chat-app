@@ -1,8 +1,13 @@
 import styled from "@emotion/styled";
 import { Box, Typography } from "@mui/material";
-import { formatDate } from "../../../utils/commonUtils";
+import GetAppIcon from "@mui/icons-material/GetApp";
+
+import { formatDate, downloadMedia } from "../../../utils/commonUtils";
 import { useContext } from "react";
 import { AccountContext } from "../../../context/AccountProvider";
+
+const iconPdf =
+  "https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/27_Pdf_File_Type_Adobe_logo_logos-512.png";
 
 const Own = styled(Box)`
   background: #dcf8c6;
@@ -45,17 +50,97 @@ function MessageCard({ message }) {
     <>
       {account?.sub === message.senderId ? (
         <Own>
-          <Text> {message.text} </Text>
-          <Time> {formatDate(message.createdAt)} </Time>
+          {message.type === "file" ? (
+            <ImageMessage message={message} />
+          ) : (
+            <TextMessage message={message} />
+          )}
         </Own>
       ) : (
         <Wrapper>
-          <Text> {message.text} </Text>
-          <Time> {formatDate(message.createdAt)} </Time>
+          {message.type === "file" ? (
+            <ImageMessage message={message} />
+          ) : (
+            <TextMessage message={message} />
+          )}
         </Wrapper>
       )}
     </>
   );
 }
+
+const ImageMessage = ({ message }) => {
+  return (
+    <Box
+      style={{
+        position: "relative",
+      }}
+    >
+      {message?.text?.includes(".pdf") ? (
+        <Box
+          style={{
+            display: "flex",
+          }}
+        >
+          <img
+            src={iconPdf}
+            alt="pdf-icon"
+            style={{
+              widht: 80,
+              height: 80,
+            }}
+          />
+          <Typography
+            style={{
+              fontSize: 14,
+              paddingTop: 10,
+            }}
+          >
+            {message.text.split("/").pop()}
+          </Typography>
+        </Box>
+      ) : (
+        <img
+          style={{
+            width: 300,
+            height: "100%",
+            objectFit: "cover",
+          }}
+          src={message.text}
+          alt="message.text"
+        />
+      )}
+      <Time
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+        }}
+      >
+        {" "}
+        <GetAppIcon
+          onClick={(e) => downloadMedia(e, message.text)}
+          style={{
+            marginRight: 10,
+            border: "1px solid grey",
+            borderRadius: "50%",
+            cursor: "pointer",
+          }}
+          fontSize="small"
+        />{" "}
+        {formatDate(message.createdAt)}{" "}
+      </Time>
+    </Box>
+  );
+};
+
+const TextMessage = ({ message }) => {
+  return (
+    <>
+      <Text> {message.text} </Text>
+      <Time> {formatDate(message.createdAt)}</Time>
+    </>
+  );
+};
 
 export default MessageCard;

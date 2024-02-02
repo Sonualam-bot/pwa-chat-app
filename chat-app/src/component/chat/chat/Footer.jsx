@@ -1,7 +1,9 @@
-import { Box, InputBase } from "@mui/material";
+import { Box, InputBase, styled } from "@mui/material";
 import { EmojiEmotionsOutlined, Mic } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import styled from "@emotion/styled";
+// import styled from "@emotion/styled";
+import { useEffect } from "react";
+import { uploadFile } from "../../../service/api";
 
 const Container = styled(Box)`
   height: 55px;
@@ -13,6 +15,15 @@ const Container = styled(Box)`
   & > * {
     margin: 5px;
     color: #919191;
+    cursor: pointer;
+  }
+`;
+
+const StyledAddIcon = styled(AddIcon)`
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+  &:hover {
+    transform: rotate(135deg) scale(1.4);
   }
 `;
 
@@ -30,11 +41,40 @@ const InputField = styled(InputBase)`
   font-size: 14px;
 `;
 
-function Footer({ sendText, setValue, value }) {
+function Footer({ sendText, setValue, value, file, setFile, setImage }) {
+  const onFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setValue(e.target.files[0].name);
+  };
+
+  useEffect(() => {
+    const getImage = async () => {
+      if (file) {
+        const data = new FormData();
+        data.append("name", file.name);
+        data.append("file", file);
+
+        let response = await uploadFile(data);
+        setImage(response.data.imageUrl);
+      }
+    };
+    getImage();
+  }, [file, setImage]);
+
   return (
     <Container>
       <EmojiEmotionsOutlined />
-      <AddIcon />
+      <label htmlFor="fileinput">
+        <StyledAddIcon />
+      </label>
+      <input
+        type="file"
+        id="fileinput"
+        style={{
+          display: "none",
+        }}
+        onChange={(e) => onFileChange(e)}
+      />
       <Search>
         <InputField
           placeholder="Type a message"
