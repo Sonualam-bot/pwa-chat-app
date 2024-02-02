@@ -25,7 +25,7 @@ export const newMessage = async (req, res) => {
 
 export const getMessages = async (req, res) => {
   try {
-    const messages = await Message.find({ conversationId: req.params._id });
+    const messages = await Message.find({ conversationId: req.params.id });
 
     return res.status(200).json({
       success: true,
