@@ -36,6 +36,7 @@ function Messages({ person, conversation }) {
     const code = e.keyCode || e.which;
     if (code === 13) {
       let message = {};
+      console.log(file);
       if (!file) {
         message = {
           senderId: account.sub,

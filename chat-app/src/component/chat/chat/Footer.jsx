@@ -79,7 +79,7 @@ function Footer({ sendText, setValue, value, file, setFile, setImage }) {
         <InputField
           placeholder="Type a message"
           onChange={(e) => setValue(e.target.value)}
-          onKeyPress={(e) => sendText(e)}
+          onKeyDown={(e) => sendText(e)}
           value={value}
         />
       </Search>

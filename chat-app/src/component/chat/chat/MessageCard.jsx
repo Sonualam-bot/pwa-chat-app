@@ -9,6 +9,12 @@ import { AccountContext } from "../../../context/AccountProvider";
 const iconPdf =
   "https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/27_Pdf_File_Type_Adobe_logo_logos-512.png";
 
+const videoImage =
+  "https://cdn0.iconfinder.com/data/icons/ecommercy/32/video-256.png";
+
+const audioImage =
+  "https://cdn2.iconfinder.com/data/icons/squircle-ui/32/Sound-256.png";
+
 const Own = styled(Box)`
   background: #dcf8c6;
   max-width: "60%";
@@ -84,6 +90,52 @@ const ImageMessage = ({ message }) => {
         >
           <img
             src={iconPdf}
+            alt="pdf-icon"
+            style={{
+              widht: 80,
+              height: 80,
+            }}
+          />
+          <Typography
+            style={{
+              fontSize: 14,
+              paddingTop: 10,
+            }}
+          >
+            {message.text.split("/").pop()}
+          </Typography>
+        </Box>
+      ) : message?.text?.includes(".mp4") ? (
+        <Box
+          style={{
+            display: "flex",
+          }}
+        >
+          <img
+            src={videoImage}
+            alt="pdf-icon"
+            style={{
+              widht: 80,
+              height: 80,
+            }}
+          />
+          <Typography
+            style={{
+              fontSize: 14,
+              paddingTop: 10,
+            }}
+          >
+            {message.text.split("/").pop()}
+          </Typography>
+        </Box>
+      ) : message?.text?.includes(".mp3") ? (
+        <Box
+          style={{
+            display: "flex",
+          }}
+        >
+          <img
+            src={audioImage}
             alt="pdf-icon"
             style={{
               widht: 80,
