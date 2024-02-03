@@ -71,7 +71,7 @@ function Messages({ person, conversation }) {
       setMessages(data.messages);
     };
     conversation._id && getMessageDetails();
-  }, [person._id, conversation._id, newMessageFlag]);
+  }, [person?._id, conversation?._id, newMessageFlag]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ transition: "smooth" });
@@ -81,7 +81,7 @@ function Messages({ person, conversation }) {
     socket.current.on("getMessage", (data) => {
       setIncomingMessage({
         ...data,
-        createAt: Date.now(),
+        createdAt: Date.now(),
       });
     });
   }, []);

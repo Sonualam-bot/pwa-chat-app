@@ -18,13 +18,18 @@ const getUser = (userId) => {
 };
 
 io.on("connection", (socket) => {
+  console.log("user connected");
+
+  //connect
   socket.on("addUsers", (userData) => {
     addUser(userData, socket.id);
     io.emit("getUsers", users);
   });
 
+  //send message
   socket.on("sendMessage", (data) => {
     const user = getUser(data.receiverId);
+
     io.to(user.socketId).emit("getMessage", data);
   });
 });
