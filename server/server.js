@@ -10,7 +10,7 @@ const app = express();
 dotenv.config();
 databaseConnection();
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
