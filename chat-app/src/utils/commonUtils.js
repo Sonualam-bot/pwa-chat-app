@@ -6,8 +6,9 @@ export const formatDate = (date) => {
   }`;
 };
 
-export const downloadMedia = (e, originalname) => {
+export const downloadMedia = (e, originalname, setLoading) => {
   e.preventDefault();
+  setLoading(true);
   try {
     fetch(originalname)
       .then((res) => res.blob())
@@ -25,11 +26,13 @@ export const downloadMedia = (e, originalname) => {
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(("Error while downloading image", error.message));
       });
   } catch (error) {
     console.log(("Error while downloading image", error.message));
+    setLoading(false);
   }
 };

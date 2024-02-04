@@ -60,6 +60,7 @@ function LoginDialog() {
 
   const onLoginError = (res) => {
     console.log("Login failed", res);
+    alert("Login failed");
   };
 
   return (
