@@ -3,17 +3,11 @@ import { Box, Typography } from "@mui/material";
 import GetAppIcon from "@mui/icons-material/GetApp";
 
 import { formatDate, downloadMedia } from "../../../utils/commonUtils";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AccountContext } from "../../../context/AccountProvider";
 
 const iconPdf =
   "https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/27_Pdf_File_Type_Adobe_logo_logos-512.png";
-
-const videoImage =
-  "https://cdn0.iconfinder.com/data/icons/ecommercy/32/video-256.png";
-
-const audioImage =
-  "https://cdn2.iconfinder.com/data/icons/squircle-ui/32/Sound-256.png";
 
 const Own = styled(Box)`
   background: #dcf8c6;
@@ -49,6 +43,23 @@ const Time = styled(Typography)`
   margin-top: auto;
 `;
 
+const Loader = styled(Box)`
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 2px solid #00a884;
+  border-right: 3px solid #052e16;
+  display: inline-block;
+  animation: spinner 1s linear infinite;
+  margin-right: 10px;
+
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 function MessageCard({ message }) {
   const { account } = useContext(AccountContext);
 
@@ -76,6 +87,7 @@ function MessageCard({ message }) {
 }
 
 const ImageMessage = ({ message }) => {
+  const [loading, setLoading] = useState(false);
   return (
     <Box
       style={{
@@ -111,22 +123,14 @@ const ImageMessage = ({ message }) => {
             display: "flex",
           }}
         >
-          <img
-            src={videoImage}
-            alt="pdf-icon"
+          <video
+            src={message.text}
+            controls
             style={{
-              widht: 80,
-              height: 80,
+              width: "300px",
+              height: "185px",
             }}
           />
-          <Typography
-            style={{
-              fontSize: 14,
-              paddingTop: 10,
-            }}
-          >
-            {message.text.split("/").pop()}
-          </Typography>
         </Box>
       ) : message?.text?.includes(".mp3") ? (
         <Box
@@ -134,22 +138,10 @@ const ImageMessage = ({ message }) => {
             display: "flex",
           }}
         >
-          <img
-            src={audioImage}
-            alt="pdf-icon"
-            style={{
-              widht: 80,
-              height: 80,
-            }}
-          />
-          <Typography
-            style={{
-              fontSize: 14,
-              paddingTop: 10,
-            }}
-          >
-            {message.text.split("/").pop()}
-          </Typography>
+          <audio controls>
+            <source src={message.text} type="audio/mp3" />
+            Your browser does not support the audio element.
+          </audio>
         </Box>
       ) : (
         <img
@@ -166,21 +158,25 @@ const ImageMessage = ({ message }) => {
         style={{
           position: "absolute",
           bottom: 0,
-          right: 0,
+          right: "5px",
         }}
       >
         {" "}
-        <GetAppIcon
-          onClick={(e) => downloadMedia(e, message.text)}
-          style={{
-            marginRight: 10,
-            border: "1px solid grey",
-            borderRadius: "50%",
-            cursor: "pointer",
-          }}
-          fontSize="small"
-        />{" "}
-        {formatDate(message.createdAt)}{" "}
+        {loading ? (
+          <Loader></Loader>
+        ) : (
+          <GetAppIcon
+            onClick={(e) => downloadMedia(e, message.text, setLoading)}
+            style={{
+              marginRight: 10,
+              border: "1px solid grey",
+              borderRadius: "50%",
+              cursor: "pointer",
+            }}
+            fontSize="small"
+          />
+        )}
+        {formatDate(message.createdAt)}
       </Time>
     </Box>
   );
