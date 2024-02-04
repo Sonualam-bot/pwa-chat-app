@@ -128,7 +128,7 @@ const ImageMessage = ({ message }) => {
             controls
             style={{
               width: "300px",
-              height: "185px",
+              height: "180px",
             }}
           />
         </Box>
@@ -136,6 +136,7 @@ const ImageMessage = ({ message }) => {
         <Box
           style={{
             display: "flex",
+            height: "70px",
           }}
         >
           <audio controls>
