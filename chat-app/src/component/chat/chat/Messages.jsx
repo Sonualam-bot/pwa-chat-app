@@ -36,12 +36,12 @@ function Messages({ person, conversation }) {
     const code = e.keyCode || e.which;
     if (code === 13) {
       let message = {};
-      console.log(file);
+
       if (!file) {
         message = {
           senderId: account.sub,
           receiverId: person.sub,
-          conversationId: conversation._id,
+          conversationId: conversation?._id,
           type: "text",
           text: value,
         };
@@ -49,7 +49,7 @@ function Messages({ person, conversation }) {
         message = {
           senderId: account.sub,
           receiverId: person.sub,
-          conversationId: conversation._id,
+          conversationId: conversation?._id,
           type: "file",
           text: image,
         };
@@ -67,7 +67,7 @@ function Messages({ person, conversation }) {
 
   useEffect(() => {
     const getMessageDetails = async () => {
-      let data = await getMessages(conversation._id);
+      let data = await getMessages(conversation?._id);
 
       setMessages(data.messages);
     };
@@ -99,7 +99,7 @@ function Messages({ person, conversation }) {
         {messages &&
           messages?.map((message) => {
             return (
-              <Container key={message._id} ref={scrollRef}>
+              <Container key={message?._id} ref={scrollRef}>
                 <MessageCard message={message} />
               </Container>
             );
