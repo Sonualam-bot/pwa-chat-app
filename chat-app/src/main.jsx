@@ -7,7 +7,7 @@ import { CssBaseline } from "@mui/material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AccountProvider } from "./context/AccountProvider.jsx";
 
-const clientId = `98818708492-2q44vdovud5a07mvfrefq4jlud1274vc.apps.googleusercontent.com`;
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId={clientId}>

@@ -80,6 +80,7 @@ function Messages({ person, conversation }) {
 
   useEffect(() => {
     socket.current.on("getMessage", (data) => {
+      console.log({ data });
       setIncomingMessage({
         ...data,
         createdAt: Date.now(),
@@ -92,6 +93,7 @@ function Messages({ person, conversation }) {
       conversation?.members?.includes(incomingMessage.senderId) &&
       setMessages((prev) => [...prev, incomingMessage]);
   }, [incomingMessage, conversation]);
+  console.log(incomingMessage);
 
   return (
     <Wrapper>
