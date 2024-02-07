@@ -15,6 +15,15 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <!--  -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/serviceWorker.js")
+            .then((req) => console.log("Success:", req.scope))
+            .catch((error) => console.log("Failure:", error));
+        });
+      }
+    </script>
   </body>
 </html>
