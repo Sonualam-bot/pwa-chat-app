@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "http://localhost:3000";
+const url = "https://pwa-chat-app-backend-v2.vercel.app";
 
 export const addUser = async (data) => {
   try {

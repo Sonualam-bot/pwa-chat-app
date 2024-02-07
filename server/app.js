@@ -25,7 +25,7 @@ app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
 
-const io = new Server(9000, {
+const io = new Server(process.env.SOCKET_PORT, {
   cors: {
     origin: "*",
   },
