@@ -4,8 +4,6 @@ import { io } from "socket.io-client";
 
 export const AccountContext = createContext(null);
 
-// const ENDPOINT = "http://localhost:3000";
-
 export const AccountProvider = ({ children }) => {
   const [account, setAccount] = useState();
   const [person, setPerson] = useState({});
