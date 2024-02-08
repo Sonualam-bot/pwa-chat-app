@@ -1,9 +1,17 @@
+import express from "express";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
+import cors from "cors";
+import http from "http";
+
+const app = express();
 
 dotenv.config();
+app.use(cors());
 
-const io = new Server(process.env.PORT, {
+const server = http.createServer(app);
+
+const io = new Server(server, {
   cors: {
     origin: "*",
   },
@@ -35,4 +43,12 @@ io.on("connection", (socket) => {
 
     io.to(user.socketId).emit("getMessage", data);
   });
+});
+
+app.get("/", (req, res) => {
+  res.send("Chat Socket is ON");
+});
+
+server.listen(process.env.PORT, () => {
+  console.log(`Server is listening to port ${process.env.PORT} `);
 });
