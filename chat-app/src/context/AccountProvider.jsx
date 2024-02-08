@@ -13,7 +13,7 @@ export const AccountProvider = ({ children }) => {
   const socket = useRef();
 
   useEffect(() => {
-    socket.current = io("ws://pwa-chat-app-backend-v2.vercel.app");
+    socket.current = io("https://chat-socket-server-ios7.onrender.com");
   }, []);
 
   const value = {
