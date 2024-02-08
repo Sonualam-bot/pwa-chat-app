@@ -85,7 +85,7 @@ function Messages({ person, conversation }) {
         createdAt: Date.now(),
       });
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     incomingMessage &&
