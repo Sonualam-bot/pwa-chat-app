@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import Footer from "./Footer";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AccountContext } from "../../../context/AccountProvider";
-import { getMessages, newMessage } from "../../../service/api";
+import { getMessages, newMessage, uploadFile } from "../../../service/api";
 import MessageCard from "./MessageCard";
 
 const Wrapper = styled(Box)`
@@ -27,8 +27,8 @@ function Messages({ person, conversation }) {
   const [messages, setMessages] = useState([]);
 
   const [file, setFile] = useState();
-  const [image, setImage] = useState("");
   const [incomingMessage, setIncomingMessage] = useState(null);
+  const [isMessageUploading, setIsMessageUploading] = useState(false);
 
   const scrollRef = useRef();
 
@@ -46,13 +46,20 @@ function Messages({ person, conversation }) {
           text: value,
         };
       } else {
+        const data = new FormData();
+        data.append("name", file.name);
+        data.append("file", file);
+        setIsMessageUploading(true);
+        let response = await uploadFile(data);
+
         message = {
           senderId: account.sub,
           receiverId: person.sub,
           conversationId: conversation?._id,
           type: "file",
-          text: image,
+          text: response.data.imageUrl,
         };
+        setIsMessageUploading(false);
       }
 
       socket.current.emit("sendMessage", message);
@@ -60,7 +67,6 @@ function Messages({ person, conversation }) {
       await newMessage(message);
       setValue("");
       setFile("");
-      setImage("");
       setNewMessageFlag((prev) => !prev);
     }
   };
@@ -85,7 +91,7 @@ function Messages({ person, conversation }) {
         createdAt: Date.now(),
       });
     });
-  }, [socket]);
+  }, [messages, socket]);
 
   useEffect(() => {
     incomingMessage &&
@@ -109,9 +115,8 @@ function Messages({ person, conversation }) {
         sendText={sendText}
         setValue={setValue}
         value={value}
-        file={file}
         setFile={setFile}
-        setImage={setImage}
+        isMessageUploading={isMessageUploading}
       />
     </Wrapper>
   );

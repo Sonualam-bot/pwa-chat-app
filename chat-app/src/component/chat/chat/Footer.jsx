@@ -1,9 +1,6 @@
 import { Box, InputBase, styled } from "@mui/material";
 import { EmojiEmotionsOutlined, Mic } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-// import styled from "@emotion/styled";
-import { useEffect } from "react";
-import { uploadFile } from "../../../service/api";
 
 const Container = styled(Box)`
   height: 55px;
@@ -41,25 +38,11 @@ const InputField = styled(InputBase)`
   font-size: 14px;
 `;
 
-function Footer({ sendText, setValue, value, file, setFile, setImage }) {
+function Footer({ sendText, setValue, value, setFile, isMessageUploading }) {
   const onFileChange = (e) => {
     setFile(e.target.files[0]);
     setValue(e.target.files[0].name);
   };
-
-  useEffect(() => {
-    const getImage = async () => {
-      if (file) {
-        const data = new FormData();
-        data.append("name", file.name);
-        data.append("file", file);
-
-        let response = await uploadFile(data);
-        setImage(response.data.imageUrl);
-      }
-    };
-    getImage();
-  }, [file, setImage]);
 
   return (
     <Container>
@@ -77,6 +60,7 @@ function Footer({ sendText, setValue, value, file, setFile, setImage }) {
       />
       <Search>
         <InputField
+          disabled={isMessageUploading}
           placeholder="Type a message"
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => sendText(e)}

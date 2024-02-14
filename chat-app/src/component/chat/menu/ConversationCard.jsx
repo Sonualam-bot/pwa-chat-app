@@ -82,7 +82,7 @@ function ConversationCard({ user }) {
         </Container>
         <Box>
           <Text>
-            {message?.text?.includes("localhost") ? "media" : message?.text}
+            {message?.text?.includes("onrender") ? "media" : message?.text}
           </Text>
         </Box>
       </Box>

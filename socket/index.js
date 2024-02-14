@@ -7,13 +7,23 @@ import http from "http";
 const app = express();
 
 dotenv.config();
-app.use(cors());
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://pwa-chat-app-mralam.vercel.app/",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: allowedOrigins,
   },
 });
 
@@ -40,6 +50,7 @@ io.on("connection", (socket) => {
   //send message
   socket.on("sendMessage", (data) => {
     const user = getUser(data.receiverId);
+    console.log({ data });
 
     io.to(user.socketId).emit("getMessage", data);
   });
