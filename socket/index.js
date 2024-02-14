@@ -10,7 +10,7 @@ dotenv.config();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://pwa-chat-app-mralam.vercel.app/",
+  "https://pwa-chat-app-mralam.vercel.app",
 ];
 
 app.use(
