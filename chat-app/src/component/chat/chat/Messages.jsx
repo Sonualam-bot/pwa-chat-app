@@ -5,6 +5,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { AccountContext } from "../../../context/AccountProvider";
 import { getMessages, newMessage, uploadFile } from "../../../service/api";
 import MessageCard from "./MessageCard";
+import { memoizedMessages } from "../../../utils/memoizedMessages";
 
 const Wrapper = styled(Box)`
   background-image: url(${"https://i.pinimg.com/564x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg"});
@@ -23,7 +24,7 @@ const Container = styled(Box)`
 function Messages({ person, conversation }) {
   const { account, socket, newMessageFlag, setNewMessageFlag } =
     useContext(AccountContext);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState();
   const [messages, setMessages] = useState([]);
 
   const [file, setFile] = useState();
@@ -72,12 +73,19 @@ function Messages({ person, conversation }) {
   };
 
   useEffect(() => {
-    const getMessageDetails = async () => {
-      let data = await getMessages(conversation?._id);
-
-      setMessages(data.messages);
-    };
-    conversation._id && getMessageDetails();
+    const { isCached, data } = memoizedMessages(conversation?._id);
+    console.log(isCached);
+    console.log(data);
+    if (isCached) {
+      setMessages(data);
+    } else {
+      const getMessageDetails = async () => {
+        let data = await getMessages(conversation?._id);
+        memoizedMessages(conversation?._id, data.messages);
+        setMessages(data.messages);
+      };
+      getMessageDetails();
+    }
   }, [person?._id, conversation?._id, newMessageFlag]);
 
   useEffect(() => {
