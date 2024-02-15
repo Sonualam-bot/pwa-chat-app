@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "https://chat-app-clone-server.onrender.com";
+const url = "https://pwa-chat-app-backend.vercel.app";
 
 export const addUser = async (data) => {
   try {

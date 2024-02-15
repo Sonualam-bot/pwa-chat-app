@@ -41,26 +41,32 @@ const Status = styled(Typography)`
   margin-left: 12px !important;
 `;
 
-function ChatHeader({ person }) {
+function ChatHeader({ person, conversation }) {
   const { activeUsers } = useContext(AccountContext);
 
   const userDp = person.picture ? person.picture : defaultDP;
   return (
     <Header>
-      <Image src={userDp} alt="dp" />
-      <Box>
-        <Name>{person.name}</Name>
-        <Status>
-          {" "}
-          {activeUsers?.find((user) => user.sub === person.sub)
-            ? "Online"
-            : "Offline"}{" "}
-        </Status>
-      </Box>
-      <RightIcons>
-        <Search />
-        <MoreVert />
-      </RightIcons>
+      {conversation ? (
+        <>
+          <Image src={userDp} alt="dp" />
+          <Box>
+            <Name>{person.name}</Name>
+            <Status>
+              {" "}
+              {activeUsers?.find((user) => user.sub === person.sub)
+                ? "Online"
+                : "Offline"}{" "}
+            </Status>
+          </Box>
+          <RightIcons>
+            <Search />
+            <MoreVert />
+          </RightIcons>
+        </>
+      ) : (
+        <h1>loading</h1>
+      )}
     </Header>
   );
 }

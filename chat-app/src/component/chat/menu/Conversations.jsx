@@ -33,21 +33,22 @@ function Conversations({ text }) {
   useEffect(() => {
     socket.current.emit("addUsers", account);
     socket.current.on("getUsers", (users) => setActiveUsers(users));
-  }, [account, socket, setActiveUsers]);
+  }, [account]);
 
   return (
     <Component>
-      {users?.map((user, index) => {
-        return (
-          user.sub !== account.sub && (
-            <Box key={user._id}>
-              <ConversationCard user={user} key={user._id} />
+      {users &&
+        users?.map((user, index) => {
+          return (
+            user.sub !== account.sub && (
+              <Box key={user._id}>
+                <ConversationCard user={user} key={user._id} />
 
-              {users.length !== index + 1 && <StyledDivider />}
-            </Box>
-          )
-        );
-      })}
+                {users.length !== index + 1 && <StyledDivider />}
+              </Box>
+            )
+          );
+        })}
     </Component>
   );
 }

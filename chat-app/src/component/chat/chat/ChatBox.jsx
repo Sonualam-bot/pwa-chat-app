@@ -17,7 +17,7 @@ function ChatBox() {
         receiverId: person.sub,
       });
 
-      setConversation(data.conversation);
+      setConversation(data?.conversation);
     };
 
     getConversationDetails();
@@ -25,7 +25,7 @@ function ChatBox() {
 
   return (
     <Box>
-      <ChatHeader person={person} />
+      <ChatHeader person={person} conversation={conversation} />
       <Messages person={person} conversation={conversation} />
     </Box>
   );
