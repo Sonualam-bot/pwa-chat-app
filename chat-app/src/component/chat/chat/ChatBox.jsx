@@ -6,21 +6,23 @@ import { AccountContext } from "../../../context/AccountProvider";
 import { getConversation } from "../../../service/api";
 
 function ChatBox() {
-  const { person, account } = useContext(AccountContext);
+  const { person, account, setLoading } = useContext(AccountContext);
 
   const [conversation, setConversation] = useState({});
 
   useEffect(() => {
     const getConversationDetails = async () => {
+      setLoading(true);
       let data = await getConversation({
         senderId: account.sub,
         receiverId: person.sub,
       });
 
       setConversation(data?.conversation);
+      setLoading(false);
     };
 
-    getConversationDetails();
+    conversation && getConversationDetails();
   }, [person.sub]);
 
   return (

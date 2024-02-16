@@ -1,4 +1,5 @@
 import Messenger from "./component/Messenger";
+import "./App.css";
 
 function App() {
   return (

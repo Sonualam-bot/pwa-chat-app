@@ -9,6 +9,8 @@ export const AccountProvider = ({ children }) => {
   const [person, setPerson] = useState({});
   const [activeUsers, setActiveUsers] = useState([]);
   const [newMessageFlag, setNewMessageFlag] = useState(false);
+  const [memoizedState, setMemoizedState] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const socket = useRef();
 
@@ -26,6 +28,10 @@ export const AccountProvider = ({ children }) => {
     setActiveUsers,
     newMessageFlag,
     setNewMessageFlag,
+    memoizedState,
+    setMemoizedState,
+    loading,
+    setLoading,
   };
 
   return (

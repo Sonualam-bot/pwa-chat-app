@@ -21,9 +21,25 @@ const Container = styled(Box)`
   padding: 1px 80px;
 `;
 
+const LoaderContainer = styled(Box)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+`;
+
 function Messages({ person, conversation }) {
-  const { account, socket, newMessageFlag, setNewMessageFlag } =
-    useContext(AccountContext);
+  const {
+    account,
+    socket,
+    newMessageFlag,
+    setNewMessageFlag,
+    setMemoizedState,
+    memoizedState,
+    loading,
+  } = useContext(AccountContext);
   const [value, setValue] = useState();
   const [messages, setMessages] = useState([]);
 
@@ -69,20 +85,21 @@ function Messages({ person, conversation }) {
       setValue("");
       setFile("");
       setNewMessageFlag((prev) => !prev);
+      memoizedMessages(conversation?._id, null, setMemoizedState, message);
     }
   };
 
   useEffect(() => {
-    const { isCached, data } = memoizedMessages(conversation?._id);
-    console.log(isCached);
-    console.log(data);
-    if (isCached) {
-      setMessages(data);
+    const messages = memoizedState[conversation?._id];
+
+    if (messages?.length && messages !== undefined) {
+      setMessages(messages);
     } else {
       const getMessageDetails = async () => {
         let data = await getMessages(conversation?._id);
-        memoizedMessages(conversation?._id, data.messages);
         setMessages(data.messages);
+
+        memoizedMessages(conversation?._id, data.messages, setMemoizedState);
       };
       getMessageDetails();
     }
@@ -110,14 +127,19 @@ function Messages({ person, conversation }) {
   return (
     <Wrapper>
       <Component>
-        {messages &&
+        {!loading ? (
           messages?.map((message) => {
             return (
               <Container key={message?._id} ref={scrollRef}>
                 <MessageCard message={message} />
               </Container>
             );
-          })}
+          })
+        ) : (
+          <LoaderContainer>
+            <Box className="loader"></Box>
+          </LoaderContainer>
+        )}
       </Component>
       <Footer
         sendText={sendText}
